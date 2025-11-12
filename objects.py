@@ -23,4 +23,19 @@ class Account:
 
 
 class Transaction:
-    pass
+
+    def __init__(self, sender, recipient, value):
+        self.sender: int = sender
+        self.recipient: int = recipient
+        self.value: float = value
+
+    def get(self, what: str) -> int|float|None:
+        match what:
+            case 'sender':
+                return self.sender
+            case 'recipient':
+                return self.recipient
+            case 'value':
+                return self.value
+            case _:
+                pass
