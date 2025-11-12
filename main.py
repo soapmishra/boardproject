@@ -37,7 +37,7 @@ def load_transactions(conn: connector.Connection) -> list[Transaction]:
 
 def write_transaction(conn: connector.Connection, transaction: Transaction) -> None:
     cur: connector.Cursor = conn.cursor()
-    (sender, recipient, value) = (data for data in transaction.getAll)
+    (sender, recipient, value) = (data for data in transaction.getAll())
     _ = cur.execute(f'INSERT INTO transactions ({sender},{recipient},{value})')
     conn.commit()
     cur.close()
