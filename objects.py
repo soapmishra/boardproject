@@ -6,6 +6,18 @@ class Account:
         self.name: str = name
         self.branch: str = branch
         self.balance: float = balance
+    def get(self, what: str) -> str|int|float:
+        match what:
+            case 'id':
+                return self.id
+            case 'name':
+                return self.name
+            case 'balance':
+                return self.balance
+            case 'branch':
+                return self.balance
+            case _:
+                return ''
 
 
 class Transaction:
