@@ -3,9 +3,32 @@ import main
 DATABASE = 'bank.db'
 
 def selector(options:list[str]) -> int:
+    exitButton: None | int = None
     for index in range(len(options)):
-        print(index+1, options[index])
+        if options[index].lower() in ['exit','back']:
+            exitButton = index
+            continue
+        print(f"{index}. {options[index]}")
+    if exitButton is not None:
+        print(f"{exitButton}. {options[exitButton]}")
     return int(input('Enter your choice:'))
+
+def title(header: str) -> None:
+    print(header.center(len(header)+10, '-'))
+
+def main_menu() -> None:
+    title("Main Menu")
+    options: list[str] = ['Exit', 'Create new account','Send money', 'View transactions', 'Request Loan']
+    choice: int = selector(options)
+    match choice:
+        case 0:
+            exit()
+        case 1:
+            pass #TODO: implement account creation
+        case 2:
+            pass #TODO: implement transaction send
+        case 3:
+            pass #TODO: implement loans
 
 try:
     with open('bank.db','rb'):
@@ -14,3 +37,6 @@ except FileNotFoundError:
     with main.sqlite3.connect(DATABASE) as db:
         main.create_store(db)
         print(main.load_accounts(db))
+
+while True:
+    main_menu()
