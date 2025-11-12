@@ -1,6 +1,6 @@
 from objects import Account, Transaction
-
 import sqlite3
+
 DATABASE = 'bank.db'
 def create_store(conn: sqlite3.Connection) -> None:
     cur: sqlite3.Cursor = conn.cursor()
