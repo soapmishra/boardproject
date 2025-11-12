@@ -41,6 +41,13 @@ def write_transaction(conn: connector.Connection, transaction: Transaction) -> N
     _ = cur.execute(f'INSERT INTO transactions ({sender},{recipient},{value})')
     conn.commit()
     cur.close()
+
+def write_account(conn: connector.Connection, account: Account) -> None:
+    cur: connector.Cursor = conn.cursor()
+    (id, name, balance, branch) = account.getAll()
+    _ = cur.execute(f'INSERT INTO accounts ({id}, "{name}", {balance}, "{branch}") ')
+    conn.commit()
+    cur.close()
     
 def bank_funds(connection: connector.Connection) -> float:
     transactions: list[Transaction] = load_transactions(connection)
