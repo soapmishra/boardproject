@@ -15,7 +15,15 @@ def create_store(conn: sqlite3.Connection) -> None:
 def load_accounts(conn: sqlite3.Connection) -> list[Account]:
     cur: sqlite3.Cursor = conn.cursor()
     _ = cur.execute('SELECT * from accounts')
-    accounts: list[Account] = [Account(id=int(account[0]),name=str(account[1]),balance=float(account[2]), branch=str(account[3])) for account in cur.fetchall()]
+    accounts: list[Account] =[]
+    for account in cur.fetchall():
+        accountData = {
+            "id" : str(int(account[0])),
+            "name" : str(account[1]),
+            "balance" : float(account[2]),
+            "branch" : str(account[3])
+            }
+        accounts.append(Account(**accountData))
     return accounts
 
 def load_transactions(conn: sqlite3.Connection) -> list[Transaction]:
