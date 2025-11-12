@@ -34,7 +34,7 @@ try:
     with open('bank.db','rb'):
         pass
 except FileNotFoundError:
-    with main.sqlite3.connect(DATABASE) as db:
+    with main.connector.connect(DATABASE) as db:
         main.create_store(db)
         print(main.load_accounts(db))
 
