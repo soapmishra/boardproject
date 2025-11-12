@@ -7,7 +7,10 @@ def selector(options:list[str]) -> int:
         print(index+1, options[index])
     return int(input('Enter your choice:'))
 
-
-with main.sqlite3.connect(DATABASE) as db:
-    main.create_store(db)
-    print(main.load_accounts(db))
+try:
+    with open('bank.db','rb'):
+        pass
+except FileNotFoundError:
+    with main.sqlite3.connect(DATABASE) as db:
+        main.create_store(db)
+        print(main.load_accounts(db))
