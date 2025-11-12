@@ -1,3 +1,4 @@
+from multiprocessing import Value
 from objects import Account, Transaction
 import sqlite3 as connector
 
@@ -34,9 +35,24 @@ def load_transactions(conn: connector.Connection) -> list[Transaction]:
         transactions.append(Transaction(sender=sender,recipient=recipient,value=value))
     return transactions
 
-def bankfunds(connection: connector.Connection) -> float:
+def write_transaction(conn: connector.Connection, transaction: Transaction) -> None:
+    cur: connector.Cursor = conn.cursor()
+    (sender, recipient, value) = (data for data in transaction.getAll)
+    _ = cur.execute(f'INSERT INTO transactions ({sender},{recipient},{value})')
+    conn.commit()
+    cur.close()
+    
+def bank_funds(connection: connector.Connection) -> float:
     transactions: list[Transaction] = load_transactions(connection)
     balance: float = 0
     for transaction in transactions:
         balance += transaction.value
     return balance
+
+def is_loanable(connection: connector.Connection, amount: float | int) -> bool:
+    if bank_funds(connection) < amount:
+        return False
+    return True
+
+def request_loan() -> None:
+    pass
