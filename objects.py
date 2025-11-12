@@ -1,12 +1,14 @@
 import random
 
 class Account:
+
     def __init__(self, id, name, balance, branch):
         self.id: int = random.randint(1000, 9999) if id not in range(1000, 10000) else id
         self.name: str = name
         self.branch: str = branch
         self.balance: float = balance
-    def get(self, what: str) -> str|int|float:
+
+    def get(self, what: str) -> str|int|float|None:
         match what:
             case 'id':
                 return self.id
@@ -17,7 +19,7 @@ class Account:
             case 'branch':
                 return self.balance
             case _:
-                return ''
+                pass
 
 
 class Transaction:

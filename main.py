@@ -15,15 +15,22 @@ def create_store(conn: sqlite3.Connection) -> None:
 def load_accounts(conn: sqlite3.Connection) -> list[Account]:
     cur: sqlite3.Cursor = conn.cursor()
     _ = cur.execute('SELECT * from accounts')
-    accounts: list[Account] =[]
-    account: list[int | str | float | str]
+    accounts: list[Account] = []
+    account: list[int | str | float]
     for account in cur.fetchall():
         (id, name, balance, branch) = (value for value in account)
         accounts.append(Account(id=id, name=name, balance=balance, branch=branch))
     return accounts
 
 def load_transactions(conn: sqlite3.Connection) -> list[Transaction]:
-    return []
+    cur: sqlite3.Cursor = conn.cursor()
+    _ = cur.execute('SELECT * from transactions')
+    transactions: list[Transaction] = []
+    transaction: list[int | float]
+    for transaction in cur.fetchall():
+        (sender, recipient, value) = (value for value in transaction)
+        transactions.append(Transaction(sender=sender,recipient=recipient,value=value))
+    return transactions
 
 with sqlite3.connect(DATABASE) as db:
     create_store(db)
