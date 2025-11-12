@@ -39,4 +39,4 @@ def bankfunds(connection: connector.Connection) -> float:
     balance: float = 0
     for transaction in transactions:
         balance += transaction.value
-    
+    return balance

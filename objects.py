@@ -8,16 +8,16 @@ class Account:
         self.branch: str = branch
         self.balance: float = balance
 
-    def get(self, what: str) -> str|int|float|None:
+    def get(self, what: str) -> str | None:
         match what:
             case 'id':
-                return self.id
+                return str(self.id)
             case 'name':
-                return self.name
+                return str(self.name)
             case 'balance':
-                return self.balance
+                return str(self.balance)
             case 'branch':
-                return self.balance
+                return str(self.branch)
             case _:
                 pass
 
@@ -29,13 +29,13 @@ class Transaction:
         self.recipient: int = recipient
         self.value: float = value
 
-    def get(self, what: str) -> int|float|None:
+    def get(self, what: str) -> str|None:
         match what:
             case 'sender':
-                return self.sender
+                return str(self.sender)
             case 'recipient':
-                return self.recipient
+                return str(self.recipient)
             case 'value':
-                return self.value
+                return str(self.value)
             case _:
                 pass
