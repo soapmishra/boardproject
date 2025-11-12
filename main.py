@@ -1,7 +1,6 @@
 from objects import Account, Transaction
 import sqlite3
 
-DATABASE = 'bank.db'
 def create_store(conn: sqlite3.Connection) -> None:
     cur: sqlite3.Cursor = conn.cursor()
     tables: tuple[str, str] = ("accounts (account_number VARCAHR(20) PRIMARY KEY, name VARCHAR(100), balance DOUBLE DEFAULT 0.0, branch VARCHAR(20))",
@@ -31,7 +30,3 @@ def load_transactions(conn: sqlite3.Connection) -> list[Transaction]:
         (sender, recipient, value) = (value for value in transaction)
         transactions.append(Transaction(sender=sender,recipient=recipient,value=value))
     return transactions
-
-with sqlite3.connect(DATABASE) as db:
-    create_store(db)
-    print(load_accounts(db))
