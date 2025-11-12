@@ -16,14 +16,10 @@ def load_accounts(conn: sqlite3.Connection) -> list[Account]:
     cur: sqlite3.Cursor = conn.cursor()
     _ = cur.execute('SELECT * from accounts')
     accounts: list[Account] =[]
+    account: list[int | str | float | str]
     for account in cur.fetchall():
-        accountData = {
-            "id" : str(int(account[0])),
-            "name" : str(account[1]),
-            "balance" : float(account[2]),
-            "branch" : str(account[3])
-            }
-        accounts.append(Account(**accountData))
+        (id, name, balance, branch) = (value for value in account)
+        accounts.append(Account(id=id, name=name, balance=balance, branch=branch))
     return accounts
 
 def load_transactions(conn: sqlite3.Connection) -> list[Transaction]:
