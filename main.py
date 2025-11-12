@@ -20,5 +20,6 @@ def load_accounts(conn: sqlite3.Connection) -> list[Account]:
 
 def load_transactions(conn: sqlite3.Connection) -> list[Transaction]:
     return []
+
 with sqlite3.connect(DATABASE) as db:
     create_store(db)
