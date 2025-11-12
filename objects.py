@@ -21,6 +21,9 @@ class Account:
             case _:
                 pass
 
+    def getAll(self) -> tuple[int, str, float, str]:
+        return (self.id, self.name, self.balance, self.branch)
+
 
 class Transaction:
 
@@ -39,3 +42,6 @@ class Transaction:
                 return str(self.value)
             case _:
                 pass
+
+    def getAll(self) -> tuple[int, int, float]:
+        return (self.sender, self.recipient, self.value)
