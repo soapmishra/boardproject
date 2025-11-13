@@ -45,7 +45,7 @@ class Transaction:
         return f"'{self.sender}','{self.recipient}',{self.value}"
 
     def __repr__(self) -> str:
-        return f"Transaction({self.sender}, {self.recipient}, {self.value})"
+        return f"Transaction(Sender Account Number:{self.sender}, Recipient Account Number: {self.recipient}, Amount: {self.value})"
 
     def get(self, what: str) -> str|None:
         match what:
