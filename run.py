@@ -23,6 +23,12 @@ def comma_table(data: list[list[object]|tuple[object]]) -> str:
             table+=str(field)+'\n'
         table+='\n'
 
+def view_transactions(transactions: str) -> None:
+    print('Transactions:')
+    print('format:sender,receiver,value')
+    print(transactions)
+
+
 
 def main_menu() -> None:
     title("Main Menu")
