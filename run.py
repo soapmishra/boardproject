@@ -80,7 +80,6 @@ def main_menu(conn: main.connector.Connection) -> None:
             existing_acnumber = map(tuple, main.load_accounts(conn))
             existing_acnumber = max(int(x[0]) for x in existing_acnumber)
             main.write_account(conn, main.Account(id = existing_acnumber + 1, name = name, balance=0.0, branch = branch))
-            conn.commit()
         case 2:
             view_transactions(conn)
         case 3:
