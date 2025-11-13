@@ -58,9 +58,6 @@ def remove_account(conn, account: int | str | Account):
     elif isinstance(account, Account):
         _ = cur.execute(f'DELETE FROM accounts WHERE "{Account[0]}"')
         cur.close()
-    else:
-        cur.close()
-        raise TypeError(f'{account} is not of valid type')
 
 def update_account(conn, id: int, value: float | str ):
     if isinstance(value, float):
