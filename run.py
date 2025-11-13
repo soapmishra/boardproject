@@ -1,4 +1,5 @@
 import main
+from objects import Transaction
 
 DATABASE = 'bank.db'
 BRANCHES = [
@@ -83,7 +84,13 @@ def main_menu(conn: main.connector.Connection) -> None:
         case 2:
             view_transactions(conn)
         case 3:
-            pass #TODO: implement transaction send
+            sender = int(('Enter your account number:'))
+            reciever = int(input('Enter receiver account number:'))
+            value = abs(int(input('Enter amount to send:')))
+            transaction = main.Transaction(sender, reciever, value)
+            print(transaction)
+            if input('Confirm (y/N): '):
+                main.transact(conn, transaction)
         case 4:
             pass #TODO: implement loans
 
