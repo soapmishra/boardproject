@@ -20,7 +20,7 @@ def comma_table(data) -> str:
     table=''
     for row in data:
         for field in row:
-            table+=str(field)+'\n'
+            table+=str(field)+','
         table+='\n'
     return table
 
