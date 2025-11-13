@@ -56,7 +56,7 @@ def remove_account(conn, account: int | str | Account):
         _ = cur.execute(f'DELETE FROM accounts WHERE name = "{account}"')
         cur.close()
     elif isinstance(account, Account):
-        _ = cur.execute(f'DELETE FROM accounts WHERE "{Account[0]}"')
+        _ = cur.execute(f'DELETE FROM accounts WHERE "{account[0]}"')
         cur.close()
 
 def update_account(conn, id, value: float | str ):
