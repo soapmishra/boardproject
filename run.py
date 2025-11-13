@@ -16,13 +16,12 @@ def selector(options:list[str]) -> int:
 def title(header: str) -> None:
     print(header.center(len(header)+10, '-'))
 
-def comma_table(data: list[list[object]|tuple[object]]) -> str:
+def comma_table(data) -> str:
     table=''
     for row in data:
         for field in row:
             table+=str(field)+'\n'
         table+='\n'
-    return table
 
 def view_transactions(transactions: str) -> None:
     print('Transactions:')
