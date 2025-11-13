@@ -68,7 +68,10 @@ def update_account(conn, id, value: float | str ):
 
 def transact(conn: connector.Connection, transaction: Transaction):
     cur = conn.cursor()
-    remove_account(transaction[0])
+    (sender, receiver, value) = transaction
+    update_account(conn, sender, value=-value)
+    update_account(conn, receiver, value=value)
+    write_transaction(conn, transaction)
     
     
 def bank_funds(connection: connector.Connection) -> float:
