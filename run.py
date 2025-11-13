@@ -16,25 +16,25 @@ def selector(options:list[str]) -> int:
 def title(header: str) -> None:
     print(header.center(len(header)+10, '-'))
 
-def comma_table(data: list[list[object]|tuple[object]]) -> str:
+def comma_table(data) -> str:
     table=''
     for row in data:
         for field in row:
             table+=str(field)+'\n'
         table+='\n'
     return table
-    return table
 
-def view_transactions(transactions: str) -> None:
+def view_transactions(conn: main.connector.Connection) -> None:
+    transactions = main.load_transactions(conn)
+    transactions = list(map(str, transactions))
     print('Transactions:')
     print('format:sender,receiver,value')
-    print(transactions)
+    print(comma_table(transactions))
 
 
-
-def main_menu() -> None:
+def main_menu(conn: main.connector.Connection) -> None:
     title("Main Menu")
-    options: list[str] = ['Exit', 'Create new account','Send money', 'View transactions', 'Request Loan']
+    options: list[str] = ['Exit', 'Create new account', 'View transactions', 'Send money', 'View accounts', 'Request Loan']
     choice: int = selector(options)
     match choice:
         case 0:
@@ -42,8 +42,10 @@ def main_menu() -> None:
         case 1:
             pass #TODO: implement account creation
         case 2:
-            pass #TODO: implement transaction send
+            view_transactions(conn)
         case 3:
+            pass #TODO: implement transaction send
+        case 4:
             pass #TODO: implement loans
 
 try:
@@ -55,4 +57,5 @@ except FileNotFoundError:
         print(main.load_accounts(db))
 
 while True:
-    main_menu()
+    with main.connector.connect(DATABASE) as conn:
+            main_menu(conn)
