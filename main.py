@@ -61,8 +61,15 @@ def remove_account(conn, account: int | str | Account):
     else:
         cur.close()
         raise TypeError(f'{account} is not of valid type')
+
+def update_account(conn, id: int, value: float | str ):
+    if isinstance(value, float):
+        _ = cur.
+
+def transact(conn: connector.Connection, transaction: Transaction):
     cur = conn.cursor()
-    cur.execute('INSERT INTO transactions values')
+    remove_account(transaction[0])
+    
     
 def bank_funds(connection: connector.Connection) -> float:
     transactions: list[Transaction] = load_transactions(connection)
