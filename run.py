@@ -22,6 +22,7 @@ def comma_table(data: list[list[object]|tuple[object]]) -> str:
         for field in row:
             table+=str(field)+'\n'
         table+='\n'
+    return table
 
 def view_transactions(transactions: str) -> None:
     print('Transactions:')
