@@ -59,7 +59,8 @@ def remove_account(conn, account: int | str | Account):
         _ = cur.execute(f'DELETE FROM accounts WHERE "{Account[0]}"')
         cur.close()
 
-def update_account(conn, id: int, value: float | str ):
+def update_account(conn, id, value: float | str ):
+    cur: connector.Connection = conn.cursor()
     if isinstance(value, float):
         _ = cur.execute(f'UPDATE account SET balance = balance + {value}')
     elif isinstance(value, str):
