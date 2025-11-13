@@ -47,10 +47,16 @@ def write_account(conn: connector.Connection, account: Account) -> None:
     conn.commit()
     cur.close()
 
-def pop_account(account_number):
-    pass
-
-def transact(conn: connector.Connection):
+def remove_account(conn, account: int | str | Account):
+    cur: connector.Cursor = conn.cursor()
+    if isinstance(account, int):
+        _ = cur.execute(f'DELETE FROM accounts WHERE account_number = "{account}"')
+    elif isinstance(account, str):
+        _ = cur.execute(f'DELETE FROM accounts WHERE name = "{account}"')
+    elif isinstance(account, Account):
+        _ = cur.execute(f'DELETE FROM accounts WHERE "{Account[0]}"')
+    else:
+        raise TypeError(f'{account} is not of valid type')
     cur = conn.cursor()
     cur.execute('INSERT INTO transactions values')
     
