@@ -85,6 +85,8 @@ def is_loanable(connection: connector.Connection, amount: float | int) -> bool:
     if bank_funds(connection) < amount:
         return False
     return True
+    #TODO: WIP
 
 def request_loan() -> None:
     pass
+    #TODO: implement
