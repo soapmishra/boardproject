@@ -24,7 +24,7 @@ def comma_table(data) -> str:
         table+='\n'
     return table
 
-def view_transactions(conn: main.connector.Connection) -> None:
+def view_transactions(conn: main.connector.Connection, id=None) -> None:
     transactions = main.load_transactions(conn)
     transactions = list(map(str, transactions))
     print('Transactions:')

@@ -4,7 +4,7 @@ import sqlite3 as connector
 
 def create_store(conn: connector.Connection) -> None:
     cur: connector.Cursor = conn.cursor()
-    tables: tuple[str, str] = ("accounts (account_number VARCAHR(20) PRIMARY KEY, name VARCHAR(100), balance DOUBLE DEFAULT 0.0, branch VARCHAR(20))",
+    tables: tuple[str, str] = ("accounts (account_number VARCHAR(20) PRIMARY KEY, name VARCHAR(100), balance DOUBLE DEFAULT 0.0, branch VARCHAR(20))",
                                                    "transactions (sender VARCHAR(20) NOT NULL, recipient VARCHAR(20) NOT NULL, value DOUBLE NOT NULL, FOREIGN KEY (sender) REFERENCES accounts(account_number), FOREIGN KEY (recipient) REFERENCES accounts(account_number))")
     for table in tables:
         try:
