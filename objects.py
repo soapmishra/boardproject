@@ -8,6 +8,12 @@ class Account:
         self.branch: str = branch
         self.balance: float = balance
 
+    def __str__(self) -> str:
+        return f"{self.id},{self.name},{self.balance},{self.branch}"
+
+    def __repr__(self) -> str:
+        return f"Acount({self.id}, {self.name}, {self.balance}, {self.branch})"
+
     def get(self, what: str) -> str | None:
         match what:
             case 'id':
@@ -31,6 +37,12 @@ class Transaction:
         self.sender: int = sender
         self.recipient: int = recipient
         self.value: float = value
+
+    def __str__(self) -> str:
+        return f"{self.sender},{self.recipient},{self.value}"
+
+    def __repr__(self) -> str:
+        return f"Transaction({self.sender}, {self.recipient}, {self.value})"
 
     def get(self, what: str) -> str|None:
         match what:
