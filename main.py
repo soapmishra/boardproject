@@ -61,7 +61,9 @@ def remove_account(conn, account: int | str | Account):
 
 def update_account(conn, id: int, value: float | str ):
     if isinstance(value, float):
-        _ = cur.
+        _ = cur.execute(f'UPDATE account SET balance = balance + {value}')
+    elif isinstance(value, str):
+        _ = cur.execute(f'UPDATE accounts SET name = "{value}"')
 
 def transact(conn: connector.Connection, transaction: Transaction):
     cur = conn.cursor()
