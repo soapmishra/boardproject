@@ -1,6 +1,36 @@
 import main
 
 DATABASE = 'bank.db'
+BRANCHES = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal"
+    ]
 
 def selector(options:list[str]) -> int:
     exitButton: None | int = None
@@ -43,6 +73,14 @@ def main_menu(conn: main.connector.Connection) -> None:
             exit()
         case 1:
             pass #TODO: implement account creation
+            main.load_accounts(conn)
+            name = input('Enter your name:')
+            title('Branch Selection')
+            branch = BRANCHES[selector(BRANCHES)]
+            existing_acnumber = map(tuple, main.load_accounts(conn))
+            existing_acnumber = max(int(x[0]) for x in existing_acnumber)
+            main.write_account(conn, main.Account(id = existing_acnumber + 1, name = name, balance=0.0, branch = branch))
+            conn.commit()
         case 2:
             view_transactions(conn)
         case 3:

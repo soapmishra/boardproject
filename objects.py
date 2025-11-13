@@ -1,3 +1,6 @@
+from typing import Iterator
+
+
 import random
 
 class Account:
@@ -9,10 +12,13 @@ class Account:
         self.balance: float = balance
 
     def __str__(self) -> str:
-        return f"{self.id},{self.name},{self.balance},{self.branch}"
+        return f"'{self.id}','{self.name}',{self.balance},'{self.branch}'"
 
     def __repr__(self) -> str:
         return f"Acount({self.id}, {self.name}, {self.balance}, {self.branch})"
+    
+    def __iter__(self) -> Iterator[int | str | float]:
+        return iter((self.id, self.name, self.balance, self.branch))
 
     def get(self, what: str) -> str | None:
         match what:
@@ -27,9 +33,6 @@ class Account:
             case _:
                 pass
 
-    def getAll(self) -> tuple[int, str, float, str]:
-        return (self.id, self.name, self.balance, self.branch)
-
 
 class Transaction:
 
@@ -39,7 +42,7 @@ class Transaction:
         self.value: float = value
 
     def __str__(self) -> str:
-        return f"{self.sender},{self.recipient},{self.value}"
+        return f"'{self.sender}','{self.recipient}',{self.value}"
 
     def __repr__(self) -> str:
         return f"Transaction({self.sender}, {self.recipient}, {self.value})"
@@ -55,5 +58,5 @@ class Transaction:
             case _:
                 pass
 
-    def getAll(self) -> tuple[int, int, float]:
-        return (self.sender, self.recipient, self.value)
+    def __iter__(self) -> Iterator[int | float]:
+        return iter((self.sender, self.recipient, self.value))

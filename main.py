@@ -1,6 +1,6 @@
-from multiprocessing import Value
 from objects import Account, Transaction
 import sqlite3 as connector
+
 
 def create_store(conn: connector.Connection) -> None:
     cur: connector.Cursor = conn.cursor()
@@ -21,7 +21,7 @@ def load_accounts(conn: connector.Connection) -> list[Account]:
     account: list[int | str | float]
     for account in cur.fetchall():
         (id, name, balance, branch) = (value for value in account)
-        accounts.append(Account(id=id, name=name, balance=balance, branch=branch))
+        accounts.append(Account(id=int(id), name=name, balance=float(balance), branch=branch))
     cur.close()
     return accounts
 
@@ -32,22 +32,27 @@ def load_transactions(conn: connector.Connection) -> list[Transaction]:
     transaction: list[int | float]
     for transaction in cur.fetchall():
         (sender, recipient, value) = (value for value in transaction)
-        transactions.append(Transaction(sender=sender,recipient=recipient,value=value))
+        transactions.append(Transaction(sender=int(sender),recipient=int(recipient),value=value))
     return transactions
 
 def write_transaction(conn: connector.Connection, transaction: Transaction) -> None:
     cur: connector.Cursor = conn.cursor()
-    (sender, recipient, value) = (data for data in transaction.getAll())
-    _ = cur.execute(f'INSERT INTO transactions ({sender},{recipient},{value})')
+    _ = cur.execute(f'INSERT INTO transactions values {tuple(transaction)}')
     conn.commit()
     cur.close()
 
 def write_account(conn: connector.Connection, account: Account) -> None:
     cur: connector.Cursor = conn.cursor()
-    (id, name, balance, branch) = account.getAll()
-    _ = cur.execute(f'INSERT INTO accounts ({id}, "{name}", {balance}, "{branch}") ')
+    _ = cur.execute(f'INSERT INTO accounts values {tuple(account)} ')
     conn.commit()
     cur.close()
+
+def pop_account(account_number):
+    pass
+
+def transact(conn: connector.Connection):
+    cur = conn.cursor()
+    cur.execute('INSERT INTO transactions values')
     
 def bank_funds(connection: connector.Connection) -> float:
     transactions: list[Transaction] = load_transactions(connection)
