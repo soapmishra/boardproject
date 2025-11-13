@@ -21,12 +21,14 @@ def comma_table(data) -> str:
     for row in data:
         for field in row:
             table+=str(field)+','
-        table+='\n'
+        table = table[:-1]+'\n'
     return table
 
 def view_transactions(conn: main.connector.Connection, id=None) -> None:
     transactions = main.load_transactions(conn)
+    print(transactions)
     transactions = list(map(str, transactions))
+    transactions = [transaction.split(',') for transaction in transactions]
     print('Transactions:')
     print('format:sender,receiver,value')
     print(comma_table(transactions))
