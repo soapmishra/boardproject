@@ -20,18 +20,8 @@ class Account:
     def __iter__(self) -> Iterator[int | str | float]:
         return iter((self.id, self.name, self.balance, self.branch))
 
-    def get(self, what: str) -> str | None:
-        match what:
-            case 'id':
-                return str(self.id)
-            case 'name':
-                return str(self.name)
-            case 'balance':
-                return str(self.balance)
-            case 'branch':
-                return str(self.branch)
-            case _:
-                pass
+    def __getitem__(self, item) -> int | float:
+        return tuple(self)[item]
 
 
 class Transaction:
@@ -60,3 +50,6 @@ class Transaction:
 
     def __iter__(self) -> Iterator[int | float]:
         return iter((self.sender, self.recipient, self.value))
+
+    def __getitem__(self, item) -> int | float:
+        return tuple(self)[item]
