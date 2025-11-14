@@ -146,7 +146,6 @@ try:
 except FileNotFoundError:
     with main.connector.connect(DATABASE) as db:
         main.create_store(db)
-        print(main.load_accounts(db))
 
 while True:
     with main.connector.connect(DATABASE) as conn:
