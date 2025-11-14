@@ -84,13 +84,13 @@ def view_accounts(conn: main.connector.Connection) -> None:
 
 def main_menu(conn: main.connector.Connection) -> None:
     title("Main Menu")
-    options: list[str] = ['Exit', 'Register new user account', 'View accounts', 'Register Transaction', 'View transactions', 'Add Loan Request']
+    options: list[str] = ['Exit', 'Register new user account', 'View accounts', 'Register Transaction', 'View transactions', 'Add Donation To Treasury']
     choice: int = selector(options)
     match choice:
         case 0:
             exit()
         case 1:
-            name = input('Enter your name:')
+            name = input('Enter account holder name:')
             title('Select a branch:')
             branch = BRANCHES[selector(BRANCHES)]
             title('Select account type:')
@@ -104,7 +104,7 @@ def main_menu(conn: main.connector.Connection) -> None:
         case 2:
             view_accounts(conn)
         case 3:
-            sender = int(('Enter your account number:'))
+            sender = int(('Enter sender account number:'))
             reciever = int(input('Enter receiver account number:'))
             value = abs(int(input('Enter amount to send:')))
             transaction = main.Transaction(sender, reciever, value)
@@ -114,7 +114,9 @@ def main_menu(conn: main.connector.Connection) -> None:
         case 4:
             view_transactions(conn)
         case 5:
-            pass #TODO: implement loans
+            donor = int(input('Enter donor account number:'))
+            amount = abs(int(input('Enter amount to donate:')))
+            main.donation(conn, donor, )
 
 try:
     with open('bank.db','rb'):
