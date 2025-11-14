@@ -79,11 +79,14 @@ def main_menu(conn: main.connector.Connection) -> None:
         case 1:
             main.load_accounts(conn)
             name = input('Enter your name:')
-            title('Branch Selection')
+            title('Select a branch:')
             branch = BRANCHES[selector(BRANCHES)]
+            ac_type = AC_TYPES[selector(AC_TYPES)]
             existing_acnumber = map(tuple, main.load_accounts(conn))
             existing_acnumber = max(int(x[0]) for x in existing_acnumber)
-            main.write_account(conn, main.Account(id = existing_acnumber + 1, name = name, balance=0.0, branch = branch))
+            account = main.Account(id = existing_acnumber + 1, name = name, balance=0.0, branch = branch, type=ac_type)
+            if input('Confirm (y/N): '):
+                main.write_account(conn, account)
         case 2:
             pass # TODO: implement view accounts
         case 3:
