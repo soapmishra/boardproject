@@ -93,3 +93,7 @@ def bank_funds(connection: connector.Connection) -> float:
 def donation(conn: connector.Connection, Account: Account, amount: float):
     donation = Transaction(sender=Account[0], recipient=999, value = amount)
     return donation
+
+#TODO: implement Administrator account creation
+#TODO: implement Administrator login
+#TODO: implement Administrator account deletion with protection against removal of all administrators
