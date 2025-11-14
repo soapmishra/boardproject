@@ -30,10 +30,10 @@ def load_transactions(conn: connector.Connection) -> list[Transaction]:
     cur: connector.Cursor = conn.cursor()
     _ = cur.execute('SELECT * from transactions')
     transactions: list[Transaction] = []
-    transaction: list[int | float]
-    for transaction in cur.fetchall():
-        (sender, recipient, value) = (value for value in transaction)
-        transactions.append(Transaction(sender=int(sender),recipient=int(recipient),value=value))
+    transaction_data: tuple[int, int, float]
+    for transaction_data in cur.fetchall():
+        transaction = Transaction(*transaction_data)
+        transactions.append(transaction)
     return transactions
 
 def write_transaction(conn: connector.Connection, transaction: Transaction) -> None:
