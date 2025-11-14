@@ -52,13 +52,11 @@ def delete_account(conn, data: int | str | Account):
     cur: connector.Cursor = conn.cursor()
     if isinstance(data, int):
         _ = cur.execute(f'DELETE FROM accounts WHERE account_number = "{data}"')
-        cur.close()
     elif isinstance(data, str):
         _ = cur.execute(f'DELETE FROM accounts WHERE name = "{data}"')
-        cur.close()
     elif isinstance(data, Account):
         _ = cur.execute(f'DELETE FROM accounts WHERE account_number = "{data[0]}"')
-        cur.close()
+    cur.close()
     conn.commit()
 
 def update_account(conn, id, value: float | str ):
@@ -67,6 +65,7 @@ def update_account(conn, id, value: float | str ):
         _ = cur.execute(f'UPDATE account SET balance = balance + {value} WHERE id = {id}')
     elif isinstance(value, str):
         _ = cur.execute(f'UPDATE accounts SET name = "{value}" WHERE id = {id}')
+    cur.close()
     conn.commit()
 
 def transact(conn: connector.Connection, transaction: Transaction):
