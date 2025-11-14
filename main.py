@@ -13,6 +13,8 @@ def create_store(conn: connector.Connection) -> None:
             _ = cur.execute(f'CREATE TABLE {table}')
         except:
             pass
+    treasury: Account = Account(0, 'Bank Treasury', 0.0, 'Headquarters', 'Official')
+    write_account(conn, treasury)
     conn.commit()
     cur.close()
 
