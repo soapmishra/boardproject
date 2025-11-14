@@ -15,7 +15,7 @@ class Account:
         return f"Acount(Acount ID: {self.id}, Account Name: {self.name}, Account Balance: {self.balance}, Bank Branch: {self.branch}, Account Type: {self.type})"
     
     def __iter__(self):
-        return iter((self.id, self.name, self.balance, self.branch, self.type))
+        return iter((self.id, self.name, self.balance, self.branch, self.type, self.deleted))
 
     def __getitem__(self, item) -> int | float:
         return tuple(self)[item]
