@@ -31,6 +31,11 @@ BRANCHES = [
     "Uttarakhand",
     "West Bengal"
     ]
+AC_TYPES = [
+    'Checking Acount',
+    'Savings Account',
+    'Salary Account'
+    ]
 
 def selector(options:list[str]) -> int:
     exitButton: None | int = None
