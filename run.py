@@ -1,5 +1,4 @@
 import main
-from objects import Transaction
 
 DATABASE = 'bank.db'
 BRANCHES = [
