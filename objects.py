@@ -34,17 +34,6 @@ class Transaction:
     def __repr__(self) -> str:
         return f"Transaction(Sender Account Number:{self.sender}, Recipient Account Number: {self.recipient}, Amount: {self.value})"
 
-    def get(self, what: str) -> str|None:
-        match what:
-            case 'sender':
-                return str(self.sender)
-            case 'recipient':
-                return str(self.recipient)
-            case 'value':
-                return str(self.value)
-            case _:
-                pass
-
     def __iter__(self):
         return iter((self.sender, self.recipient, self.value))
 
