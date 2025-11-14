@@ -66,5 +66,5 @@ class Administrator:
     def __iter__(self):
         return iter((self.id, self.name, self.passwordhash))
 
-    def __getitem(self, item):
+    def __getitem__(self, item):
         return tuple(self)[item]
