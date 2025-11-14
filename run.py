@@ -116,7 +116,8 @@ def main_menu(conn: main.connector.Connection) -> None:
         case 5:
             donor = int(input('Enter donor account number:'))
             amount = abs(int(input('Enter amount to donate:')))
-            main.donation(conn, donor, )
+            donation = main.donation(conn, donor, amount)
+            main.transact(conn, donation)
 
 try:
     with open('bank.db','rb'):
