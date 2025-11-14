@@ -20,11 +20,10 @@ def load_accounts(conn: connector.Connection) -> list[Account]:
     cur: connector.Cursor = conn.cursor()
     _ = cur.execute('SELECT * from accounts')
     accounts: list[Account] = []
-    account: list[int | str | float]
-    for account in cur.fetchall():
-        (id, name, balance, branch) = (value for value in account)
-        accounts.append(Account(id=int(id), name=name, balance=float(balance), branch=branch))
-    cur.close()
+    account_data: tuple[int, int, str, float, int]
+    for account_data in cur.fetchall():
+        account = Account(*account_data)
+        accounts.append(account)
     return accounts
 
 def load_transactions(conn: connector.Connection) -> list[Transaction]:
