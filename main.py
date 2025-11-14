@@ -90,12 +90,6 @@ def bank_funds(connection: connector.Connection) -> float:
         balance += transaction.value
     return balance
 
-def is_loanable(connection: connector.Connection, amount: float | int) -> bool:
-    if bank_funds(connection) < amount:
-        return False
-    return True
-    #TODO: WIP
-
-def request_loan() -> None:
-    pass
-    #TODO: implement
+def donation(conn: connector.Connection, Account: Account, amount: float):
+    donation = Transaction(sender=Account[0], recipient=999, value = amount)
+    return donation
