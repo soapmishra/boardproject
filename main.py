@@ -6,21 +6,22 @@ def create_store(conn: connector.Connection) -> None:
     cur: connector.Cursor = conn.cursor()
     tables: tuple[str, str] = (
         "accounts (account_number VARCHAR(20) PRIMARY KEY, name VARCHAR(100), balance DOUBLE DEFAULT 0.0, branch VARCHAR(20), type VARCHAR(20), deleted VARCHAR(1))",
-        "transactions (sender VARCHAR(20) NOT NULL, recipient VARCHAR(20) NOT NULL, value DOUBLE NOT NULL, FOREIGN KEY (sender) REFERENCES accounts(account_number), FOREIGN KEY (recipient) REFERENCES accounts(account_number))"
-        )
+        "transactions (sender VARCHAR(20) NOT NULL, recipient VARCHAR(20) NOT NULL, value DOUBLE NOT NULL, FOREIGN KEY (sender) REFERENCES accounts(account_number), FOREIGN KEY (recipient) REFERENCES accounts(account_number))",
+    )
     for table in tables:
         try:
-            _ = cur.execute(f'CREATE TABLE {table}')
+            _ = cur.execute(f"CREATE TABLE {table}")
         except:
             pass
-    treasury: Account = Account(999, 'Bank Treasury', 0.0, 'Headquarters', 'Official')
+    treasury: Account = Account(999, "Bank Treasury", 0.0, "Headquarters", "Official")
     write_account(conn, treasury)
     conn.commit()
     cur.close()
 
+
 def load_accounts(conn: connector.Connection) -> list[Account]:
     cur: connector.Cursor = conn.cursor()
-    _ = cur.execute('SELECT * from accounts')
+    _ = cur.execute("SELECT * from accounts")
     accounts: list[Account] = []
     account_data: tuple[int, int, str, float, int]
     for account_data in cur.fetchall():
@@ -28,16 +29,18 @@ def load_accounts(conn: connector.Connection) -> list[Account]:
         accounts.append(account)
     return accounts
 
-def load_account(conn: connector.Connection, id:int) -> Account:
+
+def load_account(conn: connector.Connection, id: int) -> Account:
     cur: connector.Cursor = conn.cursor()
     _ = cur.execute(f"SELECT * from accounts where account_number = '{id}'")
     account_data = cur.fetchone()
     account: Account = Account(*account_data)
     return account
 
+
 def load_transactions(conn: connector.Connection) -> list[Transaction]:
     cur: connector.Cursor = conn.cursor()
-    _ = cur.execute('SELECT * from transactions')
+    _ = cur.execute("SELECT * from transactions")
     transactions: list[Transaction] = []
     transaction_data: tuple[int, int, float]
     for transaction_data in cur.fetchall():
@@ -45,17 +48,20 @@ def load_transactions(conn: connector.Connection) -> list[Transaction]:
         transactions.append(transaction)
     return transactions
 
+
 def write_transaction(conn: connector.Connection, transaction: Transaction) -> None:
     cur: connector.Cursor = conn.cursor()
-    _ = cur.execute(f'INSERT INTO transactions values {tuple(transaction)}')
+    _ = cur.execute(f"INSERT INTO transactions values {tuple(transaction)}")
     conn.commit()
     cur.close()
 
+
 def write_account(conn: connector.Connection, account: Account) -> None:
     cur: connector.Cursor = conn.cursor()
-    _ = cur.execute(f'INSERT INTO accounts values {tuple(account)} ')
+    _ = cur.execute(f"INSERT INTO accounts values {tuple(account)} ")
     conn.commit()
     cur.close()
+
 
 def delete_account(conn, data: int | str | Account):
     cur: connector.Cursor = conn.cursor()
@@ -68,21 +74,26 @@ def delete_account(conn, data: int | str | Account):
     cur.close()
     conn.commit()
 
-def update_account(conn, id, value: float | str ):
+
+def update_account(conn, id, value: float | str):
     cur: connector.Connection = conn.cursor()
     if isinstance(value, float):
-        _ = cur.execute(f'UPDATE account SET balance = balance + {value} WHERE id = {id}')
+        _ = cur.execute(
+            f"UPDATE account SET balance = balance + {value} WHERE id = {id}"
+        )
     elif isinstance(value, str):
         _ = cur.execute(f'UPDATE accounts SET name = "{value}" WHERE id = {id}')
     cur.close()
     conn.commit()
+
 
 def transact(conn: connector.Connection, transaction: Transaction):
     (sender, receiver, amount) = transaction
     update_account(conn, sender, -amount)
     update_account(conn, receiver, amount)
     write_transaction(conn, transaction)
-    
+
+
 def bank_funds(connection: connector.Connection) -> float:
     transactions: list[Transaction] = load_transactions(connection)
     balance: float = 0
@@ -90,10 +101,12 @@ def bank_funds(connection: connector.Connection) -> float:
         balance += transaction.value
     return balance
 
+
 def donation(conn: connector.Connection, Account: Account, amount: float):
-    donation = Transaction(sender=Account[0], recipient=999, value = amount)
+    donation = Transaction(sender=Account[0], recipient=999, value=amount)
     return donation
 
-#TODO: implement Administrator account creation
-#TODO: implement Administrator login
-#TODO: implement Administrator account deletion with protection against removal of all administrators
+
+# TODO: implement Administrator account creation
+# TODO: implement Administrator login
+# TODO: implement Administrator account deletion with protection against removal of all administrators

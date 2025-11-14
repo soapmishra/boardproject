@@ -3,7 +3,7 @@ import hashlib
 
 class Account:
 
-    def __init__(self, id, name, balance, branch, type, deleted = 0):
+    def __init__(self, id, name, balance, branch, type, deleted=0):
         self.id: int = int(id)
         self.name: str = str(name)
         self.branch: str = str(branch)
@@ -16,9 +16,11 @@ class Account:
 
     def __repr__(self) -> str:
         return f"Acount(Acount ID: {self.id}, Account Name: {self.name}, Account Balance: {self.balance}, Bank Branch: {self.branch}, Account Type: {self.type})"
-    
+
     def __iter__(self):
-        return iter((self.id, self.name, self.balance, self.branch, self.type, self.deleted))
+        return iter(
+            (self.id, self.name, self.balance, self.branch, self.type, self.deleted)
+        )
 
     def __getitem__(self, item) -> int | float:
         return tuple(self)[item]
@@ -43,15 +45,16 @@ class Transaction:
     def __getitem__(self, item) -> int | float:
         return tuple(self)[item]
 
+
 class Administrator:
 
     def __init__(self, id, name, password):
-        self.id:int = int(id)
-        self.name:str = str(name)
-        self.__password:str = str(password)
+        self.id: int = int(id)
+        self.name: str = str(name)
+        self.__password: str = str(password)
 
         # Generates a hash digest for the password
-        self.passwordhash = self.__password.encode('utf-8')
+        self.passwordhash = self.__password.encode("utf-8")
         self.passwordhash = hashlib.sha256(self.passwordhash)
 
     def __str__(self) -> str:
@@ -59,7 +62,7 @@ class Administrator:
 
     def __repr__(self) -> str:
         return f"Administrator(ID: {self.id}, Name: {self.name}, Password: {self.__password})"
-    
+
     def __iter__(self):
         return iter((self.id, self.name, self.passwordhash))
 
