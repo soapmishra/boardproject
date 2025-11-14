@@ -61,7 +61,6 @@ def comma_table(data) -> str:
 
 def view_transactions(conn: main.connector.Connection, id=None) -> None:
     transactions = main.load_transactions(conn)
-    print(transactions)
     transactions = list(map(str, transactions))
     transactions = [transaction.split(',') for transaction in transactions]
     print('Transactions:')
@@ -70,7 +69,6 @@ def view_transactions(conn: main.connector.Connection, id=None) -> None:
 
 def view_accounts(conn: main.connector.Connection) -> None:
     accounts = main.load_accounts(conn)
-    print(accounts)
     accounts = list(map(str, accounts))
     ignore =[]
     accounts = [account.split(',') for account in accounts]
@@ -92,7 +90,6 @@ def main_menu(conn: main.connector.Connection) -> None:
         case 0:
             exit()
         case 1:
-            main.load_accounts(conn)
             name = input('Enter your name:')
             title('Select a branch:')
             branch = BRANCHES[selector(BRANCHES)]
