@@ -81,6 +81,7 @@ def main_menu(conn: main.connector.Connection) -> None:
             name = input('Enter your name:')
             title('Select a branch:')
             branch = BRANCHES[selector(BRANCHES)]
+            title('Select account type:')
             ac_type = AC_TYPES[selector(AC_TYPES)]
             existing_acnumber = map(tuple, main.load_accounts(conn))
             existing_acnumber = max(int(x[0]) for x in existing_acnumber)
