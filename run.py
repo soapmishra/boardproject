@@ -116,6 +116,7 @@ def main_menu(conn: main.connector.Connection) -> None:
         case 5:
             donor = int(input('Enter donor account number:'))
             amount = abs(int(input('Enter amount to donate:')))
+            donor = main.load_account(conn, donor)
             donation = main.donation(conn, donor, amount)
             main.transact(conn, donation)
 
