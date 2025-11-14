@@ -84,12 +84,13 @@ def view_accounts(conn: main.connector.Connection) -> None:
 
 def main_menu(conn: main.connector.Connection) -> None:
     title("Main Menu")
-    options: list[str] = ['Exit', 'Register New User Account', 'View Accounts', 'Register Transaction', 'View Transactions', 'Add Donation To Treasury']
+    options: list[str] = ['Exit', 'Register New User Account', 'Register Transaction', 'View Accounts', 'View Transactions', 'Add Donation To Treasury']
     choice: int = selector(options)
     match choice:
         case 0:
             exit()
         case 1:
+            # Register New User Account
             name = input('Enter account holder name:')
             title('Select a branch:')
             branch = BRANCHES[selector(BRANCHES)]
@@ -101,9 +102,8 @@ def main_menu(conn: main.connector.Connection) -> None:
             print(repr(account))
             if input('Confirm (y/N): ') in 'Yy':
                 main.write_account(conn, account)
-        case 2:
-            view_accounts(conn)
-        case 3:
+        case 2: 
+            # Register Transaction
             sender = int(('Enter sender account number:'))
             reciever = int(input('Enter receiver account number:'))
             value = abs(int(input('Enter amount to send:')))
@@ -111,9 +111,14 @@ def main_menu(conn: main.connector.Connection) -> None:
             print(repr(transaction))
             if input('Confirm (y/N): ') in 'Yy':
                 main.transact(conn, transaction)
+        case 3:
+            # View Accounts
+            view_accounts(conn)
         case 4:
+            # View Transactions
             view_transactions(conn)
         case 5:
+            # Add Donation To Treasury
             donor = int(input('Enter donor account number:'))
             amount = abs(int(input('Enter amount to donate:')))
             donor = main.load_account(conn, donor)
