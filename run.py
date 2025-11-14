@@ -105,7 +105,7 @@ def main_menu(conn: main.connector.Connection) -> None:
             if input('Confirm (y/N): ') in 'Yy':
                 main.write_account(conn, account)
         case 2:
-            pass # TODO: implement view accounts
+            view_accounts(conn)
         case 3:
             sender = int(('Enter your account number:'))
             reciever = int(input('Enter receiver account number:'))
