@@ -28,6 +28,13 @@ def load_accounts(conn: connector.Connection) -> list[Account]:
         accounts.append(account)
     return accounts
 
+def load_account(conn: connector.Connection, id:int) -> Account:
+    cur: connector.Cursor = conn.cursor()
+    _ = cur.execute(f"SELECT * from accounts where account_number = '{id}'")
+    account_data = cur.fetchone()
+    account: Account = Account(*account_data)
+    return account
+
 def load_transactions(conn: connector.Connection) -> list[Transaction]:
     cur: connector.Cursor = conn.cursor()
     _ = cur.execute('SELECT * from transactions')
