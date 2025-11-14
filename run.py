@@ -66,13 +66,12 @@ def view_transactions(conn: main.connector.Connection, id=None) -> None:
 
 def main_menu(conn: main.connector.Connection) -> None:
     title("Main Menu")
-    options: list[str] = ['Exit', 'Create new account', 'View transactions', 'Send money', 'View accounts', 'Request Loan']
+    options: list[str] = ['Exit', 'Register new user account', 'View accounts', 'Register Transaction', 'View transactions', 'Add Loan Request']
     choice: int = selector(options)
     match choice:
         case 0:
             exit()
         case 1:
-            pass #TODO: implement account creation
             main.load_accounts(conn)
             name = input('Enter your name:')
             title('Branch Selection')
@@ -81,7 +80,7 @@ def main_menu(conn: main.connector.Connection) -> None:
             existing_acnumber = max(int(x[0]) for x in existing_acnumber)
             main.write_account(conn, main.Account(id = existing_acnumber + 1, name = name, balance=0.0, branch = branch))
         case 2:
-            view_transactions(conn)
+            pass # TODO: implement view accounts
         case 3:
             sender = int(('Enter your account number:'))
             reciever = int(input('Enter receiver account number:'))
@@ -91,6 +90,8 @@ def main_menu(conn: main.connector.Connection) -> None:
             if input('Confirm (y/N): '):
                 main.transact(conn, transaction)
         case 4:
+            view_transactions(conn)
+        case 5:
             pass #TODO: implement loans
 
 try:
