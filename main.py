@@ -48,24 +48,26 @@ def write_account(conn: connector.Connection, account: Account) -> None:
     conn.commit()
     cur.close()
 
-def remove_account(conn, account: int | str | Account):
+def delete_account(conn, data: int | str | Account):
     cur: connector.Cursor = conn.cursor()
-    if isinstance(account, int):
-        _ = cur.execute(f'DELETE FROM accounts WHERE account_number = "{account}"')
+    if isinstance(data, int):
+        _ = cur.execute(f'DELETE FROM accounts WHERE account_number = "{data}"')
         cur.close()
-    elif isinstance(account, str):
-        _ = cur.execute(f'DELETE FROM accounts WHERE name = "{account}"')
+    elif isinstance(data, str):
+        _ = cur.execute(f'DELETE FROM accounts WHERE name = "{data}"')
         cur.close()
-    elif isinstance(account, Account):
-        _ = cur.execute(f'DELETE FROM accounts WHERE "{account[0]}"')
+    elif isinstance(data, Account):
+        _ = cur.execute(f'DELETE FROM accounts WHERE account_number = "{data[0]}"')
         cur.close()
+    conn.commit()
 
 def update_account(conn, id, value: float | str ):
     cur: connector.Connection = conn.cursor()
     if isinstance(value, float):
-        _ = cur.execute(f'UPDATE account SET balance = balance + {value}')
+        _ = cur.execute(f'UPDATE account SET balance = balance + {value} WHERE id = {id}')
     elif isinstance(value, str):
-        _ = cur.execute(f'UPDATE accounts SET name = "{value}"')
+        _ = cur.execute(f'UPDATE accounts SET name = "{value}" WHERE id = {id}')
+    conn.commit()
 
 def transact(conn: connector.Connection, transaction: Transaction):
     (sender, receiver, amount) = transaction
