@@ -6,10 +6,10 @@ class Account:
         self.branch: str = str(branch)
         self.balance: float = float(balance)
         self.type: str = str(type)
-        self.deleted: bool = bool(int(deleted))
+        self.deleted: int = int(deleted)
 
     def __str__(self) -> str:
-        return f"'{self.id}','{self.name}',{self.balance},'{self.branch}','{self.type}'"
+        return f"{self.id},{self.name},{self.balance},{self.branch},{self.type},{int(self.deleted)}"
 
     def __repr__(self) -> str:
         return f"Acount(Acount ID: {self.id}, Account Name: {self.name}, Account Balance: {self.balance}, Bank Branch: {self.branch}, Account Type: {self.type})"
@@ -29,7 +29,7 @@ class Transaction:
         self.value: float = float(value)
 
     def __str__(self) -> str:
-        return f"'{self.sender}','{self.recipient}',{self.value}"
+        return f"{self.sender},{self.recipient},{self.value}"
 
     def __repr__(self) -> str:
         return f"Transaction(Sender Account Number:{self.sender}, Recipient Account Number: {self.recipient}, Amount: {self.value})"
