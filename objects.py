@@ -45,7 +45,7 @@ class Transaction:
             case _:
                 pass
 
-    def __iter__(self) -> Iterator[int | float]:
+    def __iter__(self):
         return iter((self.sender, self.recipient, self.value))
 
     def __getitem__(self, item) -> int | float:
