@@ -67,12 +67,10 @@ def update_account(conn, id, value: float | str ):
         _ = cur.execute(f'UPDATE accounts SET name = "{value}"')
 
 def transact(conn: connector.Connection, transaction: Transaction):
-    cur = conn.cursor()
-    (sender, receiver, value) = transaction
-    update_account(conn, sender, value=-value)
-    update_account(conn, receiver, value=value)
+    (sender, receiver, amount) = transaction
+    update_account(conn, sender, -amount)
+    update_account(conn, receiver, amount)
     write_transaction(conn, transaction)
-    
     
 def bank_funds(connection: connector.Connection) -> float:
     transactions: list[Transaction] = load_transactions(connection)
