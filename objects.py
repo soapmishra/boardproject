@@ -1,24 +1,21 @@
-from typing import Iterator
-
-
-import random
-
 class Account:
 
-    def __init__(self, id, name, balance, branch):
-        self.id: int = random.randint(1000, 9999) if id not in range(1000, 10000) else id
-        self.name: str = name
-        self.branch: str = branch
-        self.balance: float = balance
+    def __init__(self, id, name, balance, branch, type, deleted = False):
+        self.id = int(id)
+        self.name: str = str(name)
+        self.branch: str = str(branch)
+        self.balance: float = float(balance)
+        self.type: str = str(type)
+        self.deleted: bool = bool(int(deleted))
 
     def __str__(self) -> str:
-        return f"'{self.id}','{self.name}',{self.balance},'{self.branch}'"
+        return f"'{self.id}','{self.name}',{self.balance},'{self.branch}','{self.type}'"
 
     def __repr__(self) -> str:
-        return f"Acount({self.id}, {self.name}, {self.balance}, {self.branch})"
+        return f"Acount(Acount ID: {self.id}, Account Name: {self.name}, Account Balance: {self.balance}, Bank Branch: {self.branch}, Account Type: {self.type})"
     
-    def __iter__(self) -> Iterator[int | str | float]:
-        return iter((self.id, self.name, self.balance, self.branch))
+    def __iter__(self):
+        return iter((self.id, self.name, self.balance, self.branch, self.type))
 
     def __getitem__(self, item) -> int | float:
         return tuple(self)[item]
@@ -27,9 +24,9 @@ class Account:
 class Transaction:
 
     def __init__(self, sender, recipient, value):
-        self.sender: int = sender
-        self.recipient: int = recipient
-        self.value: float = value
+        self.sender: int = int(sender)
+        self.recipient: int = int(recipient)
+        self.value: float = float(value)
 
     def __str__(self) -> str:
         return f"'{self.sender}','{self.recipient}',{self.value}"
