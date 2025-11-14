@@ -1,7 +1,7 @@
 class Account:
 
-    def __init__(self, id, name, balance, branch, type, deleted: int = 0):
-        self.id = int(id)
+    def __init__(self, id, name, balance, branch, type, deleted = 0):
+        self.id: int = int(id)
         self.name: str = str(name)
         self.branch: str = str(branch)
         self.balance: float = float(balance)
