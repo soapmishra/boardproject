@@ -68,6 +68,21 @@ def view_transactions(conn: main.connector.Connection, id=None) -> None:
     print('format:sender,receiver,value')
     print(comma_table(transactions))
 
+def view_accounts(conn: main.connector.Connection) -> None:
+    accounts = main.load_accounts(conn)
+    print(accounts)
+    accounts = list(map(str, accounts))
+    ignore =[]
+    accounts = [account.split(',') for account in accounts]
+    for index in range(len(accounts)):
+        if int(accounts[index][-1])==1:
+            ignore.append(index)
+        else:
+            _ = accounts[index].pop()
+    print('Accounts:')
+    print('format:id,name,balance,branch,type')
+    print(comma_table(accounts))
+
 
 def main_menu(conn: main.connector.Connection) -> None:
     title("Main Menu")
