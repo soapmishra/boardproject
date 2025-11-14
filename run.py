@@ -101,7 +101,8 @@ def main_menu(conn: main.connector.Connection) -> None:
             existing_acnumber = map(tuple, main.load_accounts(conn))
             existing_acnumber = max(int(x[0]) for x in existing_acnumber)
             account = main.Account(id = existing_acnumber + 1, name = name, balance=0.0, branch = branch, type=ac_type)
-            if input('Confirm (y/N): '):
+            print(repr(account))
+            if input('Confirm (y/N): ') in 'Yy':
                 main.write_account(conn, account)
         case 2:
             pass # TODO: implement view accounts
@@ -110,8 +111,8 @@ def main_menu(conn: main.connector.Connection) -> None:
             reciever = int(input('Enter receiver account number:'))
             value = abs(int(input('Enter amount to send:')))
             transaction = main.Transaction(sender, reciever, value)
-            print(transaction)
-            if input('Confirm (y/N): '):
+            print(repr(transaction))
+            if input('Confirm (y/N): ') in 'Yy':
                 main.transact(conn, transaction)
         case 4:
             view_transactions(conn)
