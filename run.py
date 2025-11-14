@@ -84,7 +84,7 @@ def view_accounts(conn: main.connector.Connection) -> None:
 
 def main_menu(conn: main.connector.Connection) -> None:
     title("Main Menu")
-    options: list[str] = ['Exit', 'Register new user account', 'View accounts', 'Register Transaction', 'View transactions', 'Add Donation To Treasury']
+    options: list[str] = ['Exit', 'Register New User Account', 'View Accounts', 'Register Transaction', 'View Transactions', 'Add Donation To Treasury']
     choice: int = selector(options)
     match choice:
         case 0:
