@@ -52,8 +52,6 @@ class Administrator:
         self.id: int = int(id)
         self.name: str = str(name)
         self.__password: str = str(password)
-
-        # Generates a hash digest for the password
         self.passwordhash = self.__password.encode("utf-8")
         self.passwordhash = hashlib.sha256(self.passwordhash).hexdigest()
 

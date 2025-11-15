@@ -37,7 +37,7 @@ AC_TYPES = ["Checking Acount", "Savings Account", "Salary Account"]
 def selector(options: list[str]) -> int:
     exitButton: None | int = None
     for index in range(len(options)):
-        if options[index].lower() in ["exit", "back"]:
+        if options[index].lower() in ["exit", "back", "log out"]:
             exitButton = index
             continue
         print(f"{index}. {options[index]}")
@@ -86,12 +86,13 @@ def view_accounts(conn: main.connector.Connection) -> None:
 def main_menu(conn: main.connector.Connection) -> None:
     title("Main Menu")
     options: list[str] = [
-        "Exit",
+        "Log out",
         "Register New User Account",
         "Register Transaction",
         "View Accounts",
         "View Transactions",
         "Add Donation To Treasury",
+        "Create Administrator Account",
     ]
     choice: int = selector(options)
     match choice:
@@ -138,6 +139,13 @@ def main_menu(conn: main.connector.Connection) -> None:
             donor = main.load_account(conn, donor)
             donation = main.donation(conn, donor, amount)
             main.transact(conn, donation)
+        case 6:
+            # Add new administrator account
+            username = input("Enter Username:")
+            password = input("Set Password")
+            id = main.get_max_admin_id(conn) + 1
+            administrator = main.Administrator(id, username, password)
+            main.write_admin(administrator)
 
 
 try:
@@ -147,6 +155,15 @@ except FileNotFoundError:
     with main.connector.connect(DATABASE) as db:
         main.create_store(db)
 
-while True:
-    with main.connector.connect(DATABASE) as conn:
-        main_menu(conn)
+
+def main_activity():
+    while True:
+        with main.connector.connect(DATABASE) as conn:
+            if main.login_admin(conn, password=input("Enter your password:")):
+                main_menu(conn)
+            else:
+                print("Try again, wrong password")
+
+
+if __name__ == "__main__":
+    main_activity()

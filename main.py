@@ -1,13 +1,16 @@
-from objects import Account, Transaction
+from objects import Account, Administrator, Transaction
+import hashlib
 import sqlite3 as connector
 
 
-def create_store(conn: connector.Connection) -> None:
+def create_store(conn: connector.Connection, passwd="") -> None:
+    if passwd == "":
+        passwd = input("Enter Default Administrator(id: 0) Password:")
     cur: connector.Cursor = conn.cursor()
     tables: tuple[str, str, str] = (
         "accounts (account_number TEXT PRIMARY KEY, name TEXT, balance DOUBLE DEFAULT 0.0, branch TEXT, type TEXT, deleted TEXT)",
         "transactions (sender TEXT NOT NULL, recipient TEXT NOT NULL, value DOUBLE NOT NULL, FOREIGN KEY (sender) REFERENCES accounts(account_number), FOREIGN KEY (recipient) REFERENCES accounts(account_number))",
-        "administrators (administrator_id TEXT, name TEXT, password_hash TEXT)"
+        "administrators (administrator_id TEXT, name TEXT, password_hash TEXT)",
     )
     for table in tables:
         try:
@@ -15,6 +18,8 @@ def create_store(conn: connector.Connection) -> None:
         except:
             pass
     treasury: Account = Account(999, "Bank Treasury", 0.0, "Headquarters", "Official")
+    default_admin: Administrator = Administrator(0, "Default Administrator", passwd)
+    write_admin(conn, default_admin)
     write_account(conn, treasury)
     conn.commit()
     cur.close()
@@ -108,6 +113,43 @@ def donation(conn: connector.Connection, Account: Account, amount: float):
     return donation
 
 
-# TODO: implement Administrator account creation
-# TODO: implement Administrator login
-# TODO: implement Administrator account deletion with protection against removal of all administrators
+def write_admin(conn: connector.Connection, admin: Administrator) -> None:
+    cur = conn.cursor()
+    _ = cur.execute(f"INSERT INTO administrators values {tuple(admin)}")
+    cur.close()
+    conn.commit()
+
+
+def login_admin(conn: connector.Connection, password: str) -> bool:
+    cur = conn.cursor()
+    bytes = password.encode("utf-8")
+    hex_digest = hashlib.sha256(bytes).hexdigest()
+    _ = cur.execute(
+        f'SELECT password_hash FROM administrators WHERE password_hash = "{hex_digest}"'
+    )
+    try:
+        if len(cur.fetchall()) != 0:
+            return True
+        return False
+    finally:
+        cur.close()
+
+
+def get_max_admin_id(conn: connector.Connection) -> int:
+    cur = conn.cursor()
+    _ = cur.execute(f"SELECT max(administrator_id) from administratos")
+    max_id = cur.fetchone()
+    return max_id[0] if len(max_id) != 0 else -1
+
+
+def remove_admin(conn: connector.Connection, password: str) -> None:
+    check_cur = conn.cursor()
+    _ = check_cur.execute("SELECT * FROM administrators")
+    hex_digest = hashlib.sha256(password.encode("utf-8")).hexdigest()
+    if len(check_cur.fetchall()) > 1:
+        cur = conn.cursor()
+        _ = cur.execute(
+            f'DELETE FROM administrators WHERE password_hash = "{hex_digest}"'
+        )
+        conn.commit()
+        cur.close()
