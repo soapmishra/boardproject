@@ -139,14 +139,18 @@ def main_menu(conn: main.connector.Connection) -> None:
             amount = abs(int(input("Enter amount to donate:")))
             donor = main.load_account(conn, donor)
             donation = main.donation(conn, donor, amount)
-            main.transact(conn, donation)
+            print(repr(donation))
+            if input("Confirm (y/N)") in 'Yy':
+                main.transact(conn, donation)
         case 6:
             # Add new administrator account
             username = input("Enter Username:")
             password = input("Set Password")
             id = main.get_max_admin_id(conn) + 1
             administrator = main.Administrator(id, username, password)
-            main.write_admin(conn, administrator)
+            print(repr(administrator))
+            if input("Confirm (y/N)") in 'Yy':
+                main.write_admin(conn, administrator)
         case 7:
             password = input("Enter password for account to remove:")
             main.remove_admin(conn, password)
