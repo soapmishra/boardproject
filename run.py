@@ -3,6 +3,7 @@ import os
 import time
 import sys
 
+
 class Color:
     HEADER = "\033[95m"
     OKBLUE = "\033[94m"
@@ -38,7 +39,7 @@ def pause(message="Press Enter to continue..."):
     input(Color.OKBLUE + message + Color.ENDC)
 
 
-def paginated_view(rows: list[list[str]], page_size: int = 10, columns = '') -> None:
+def paginated_view(rows: list[list[str]], page_size: int = 10, columns="") -> None:
     """Display lists in paginated form."""
     if not rows:
         print("No data available.")
@@ -47,12 +48,16 @@ def paginated_view(rows: list[list[str]], page_size: int = 10, columns = '') -> 
     index = 0
     while index < len(rows):
         clear_screen()
-        if columns != '':
+        if columns != "":
             print(columns)
-        print(Color.BOLD + f"Showing rows {index+1} to {min(index+page_size, len(rows))}" + Color.ENDC)
+        print(
+            Color.BOLD
+            + f"Showing rows {index+1} to {min(index+page_size, len(rows))}"
+            + Color.ENDC
+        )
         print("-" * 50)
 
-        for row in rows[index:index + page_size]:
+        for row in rows[index : index + page_size]:
             print(" | ".join(str(x) for x in row))
 
         print("-" * 50)
@@ -65,6 +70,7 @@ def paginated_view(rows: list[list[str]], page_size: int = 10, columns = '') -> 
             break
 
         index += page_size
+
 
 DATABASE = "bank.db"
 BRANCHES = [
@@ -112,7 +118,6 @@ def title(header_text: str):
     header(header_text)
 
 
-
 def comma_table(data) -> str:
     table = ""
     for row in data:
@@ -132,7 +137,6 @@ def view_transactions(conn):
     pause()
 
 
-
 def view_accounts(conn):
     accounts = main.load_accounts(conn)
     rows = []
@@ -144,6 +148,7 @@ def view_accounts(conn):
     columns = "Columns: ID | Name | Balance | Branch | Type"
     paginated_view(rows, page_size=10, columns=columns)
     pause()
+
 
 def view_statement(conn):
     clear_screen()
@@ -204,7 +209,6 @@ def view_statement(conn):
     pause("End of statement. Press Enter to return...")
 
 
-
 def main_menu(conn: main.connector.Connection) -> None:
     clear_screen()
     title("Main Menu")
@@ -218,7 +222,7 @@ def main_menu(conn: main.connector.Connection) -> None:
         "Create Administrator Account",
         "Delete Administrator Account",
         "Add Money Deposit",
-        "View Account Statement"
+        "View Account Statement",
     ]
     choice: int = selector(options)
     clear_screen()
@@ -266,7 +270,7 @@ def main_menu(conn: main.connector.Connection) -> None:
             donor = main.load_account(conn, donor)
             donation = main.donation(conn, donor, amount)
             print(repr(donation))
-            if input("Confirm (y/N)") in 'Yy':
+            if input("Confirm (y/N)") in "Yy":
                 main.transact(conn, donation)
         case 6:
             # Add new administrator account
@@ -275,7 +279,7 @@ def main_menu(conn: main.connector.Connection) -> None:
             id = main.get_max_admin_id(conn) + 1
             administrator = main.Administrator(id, username, password)
             print(repr(administrator))
-            if input("Confirm (y/N)") in 'Yy':
+            if input("Confirm (y/N)") in "Yy":
                 main.write_admin(conn, administrator)
         case 7:
             password = input("Enter password for account to remove:")
@@ -284,7 +288,7 @@ def main_menu(conn: main.connector.Connection) -> None:
             # Add Money Deposit
             account_id = int(input("Enter account number: "))
             amount = float(input("Enter amount to deposit: "))
-        
+
             if amount <= 0:
                 print("Invalid amount.")
             else:
@@ -298,8 +302,6 @@ def main_menu(conn: main.connector.Connection) -> None:
         case 9:
             # View Account Statement
             view_statement(conn)
-
-        
 
 
 try:

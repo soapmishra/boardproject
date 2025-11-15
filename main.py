@@ -84,7 +84,9 @@ def delete_account(conn, data: int | str | Account):
 def update_account(conn, id, value: float | str):
     cur: connector.Connection = conn.cursor()
     if isinstance(value, float):
-        _ = cur.execute(f"UPDATE accounts SET balance = balance + {value} WHERE account_number = {id}")
+        _ = cur.execute(
+            f"UPDATE accounts SET balance = balance + {value} WHERE account_number = {id}"
+        )
     elif isinstance(value, str):
         _ = cur.execute(f'UPDATE accounts SET name = "{value}" WHERE id = {id}')
     cur.close()
@@ -152,6 +154,7 @@ def remove_admin(conn: connector.Connection, password: str) -> None:
         conn.commit()
         cur.close()
 
+
 def deposit(conn: connector.Connection, account_id: int, amount: float) -> bool:
     """Deposit money into an account safely."""
     if amount <= 0:
@@ -163,7 +166,9 @@ def deposit(conn: connector.Connection, account_id: int, amount: float) -> bool:
         return False
 
     cur = conn.cursor()
-    _ = cur.execute(f"UPDATE accounts SET balance = balance + {amount} WHERE account_number = '{account_id}'")
+    _ = cur.execute(
+        f"UPDATE accounts SET balance = balance + {amount} WHERE account_number = '{account_id}'"
+    )
     conn.commit()
     cur.close()
     return True
