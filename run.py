@@ -1,4 +1,68 @@
 import main
+import os
+import time
+import sys
+
+class Color:
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKCYAN = "\033[96m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
+
+
+def clear_screen() -> None:
+    os.system("cls" if os.name == "nt" else "clear")
+
+
+def slow_print(text: str, delay: float = 0.01) -> None:
+    for char in text:
+        print(char, end="")
+        sys.stdout.flush()
+        time.sleep(delay)
+    print()
+
+
+def header(text: str) -> None:
+    width = max(len(text) + 10, 50)
+    print(Color.OKCYAN + ("=" * width) + Color.ENDC)
+    print(Color.BOLD + text.center(width) + Color.ENDC)
+    print(Color.OKCYAN + ("=" * width) + Color.ENDC)
+
+
+def pause(message="Press Enter to continue..."):
+    input(Color.OKBLUE + message + Color.ENDC)
+
+
+def paginated_view(rows: list[list[str]], page_size: int = 10) -> None:
+    """Display lists in paginated form."""
+    if not rows:
+        print("No data available.")
+        return
+
+    index = 0
+    while index < len(rows):
+        clear_screen()
+        print(Color.BOLD + f"Showing rows {index+1} to {min(index+page_size, len(rows))}" + Color.ENDC)
+        print("-" * 50)
+
+        for row in rows[index:index + page_size]:
+            print(" | ".join(str(x) for x in row))
+
+        print("-" * 50)
+
+        if index + page_size >= len(rows):
+            break
+
+        choice = input("Next page? (Y/n): ")
+        if choice.lower() not in ("", "y"):
+            break
+
+        index += page_size
 
 DATABASE = "bank.db"
 BRANCHES = [
@@ -35,19 +99,16 @@ AC_TYPES = ["Checking Acount", "Savings Account", "Salary Account"]
 
 
 def selector(options: list[str]) -> int:
-    exitButton: None | int = None
-    for index in range(len(options)):
-        if options[index].lower() in ["exit", "back", "log out"]:
-            exitButton = index
-            continue
-        print(f"{index}. {options[index]}")
-    if exitButton is not None:
-        print(f"{exitButton}. {options[exitButton]}")
-    return int(input("Enter your choice:"))
+    print()
+    for i, option in enumerate(options):
+        print(f"{Color.OKGREEN}{i}{Color.ENDC}. {option}")
+    print()
+    return int(input("Enter your choice: "))
 
 
-def title(header: str) -> None:
-    print(header.center(len(header) + 10, "-"))
+def title(header_text: str):
+    header(header_text)
+
 
 
 def comma_table(data) -> str:
@@ -59,31 +120,33 @@ def comma_table(data) -> str:
     return table
 
 
-def view_transactions(conn: main.connector.Connection, id=None) -> None:
+def view_transactions(conn):
     transactions = main.load_transactions(conn)
-    transactions = list(map(str, transactions))
-    transactions = [transaction.split(",") for transaction in transactions]
-    print("Transactions:")
-    print("format:sender,receiver,value")
-    print(comma_table(transactions))
+    rows = [str(x).split(",") for x in transactions]
+
+    header("Transactions")
+    print("Columns: Sender | Receiver | Value")
+    paginated_view(rows, page_size=10)
+    pause()
 
 
-def view_accounts(conn: main.connector.Connection) -> None:
+
+def view_accounts(conn):
     accounts = main.load_accounts(conn)
-    accounts = list(map(str, accounts))
-    ignore = []
-    accounts = [account.split(",") for account in accounts]
-    for index in range(len(accounts)):
-        if int(accounts[index][-1]) == 1:
-            ignore.append(index)
-        else:
-            _ = accounts[index].pop()
-    print("Accounts:")
-    print("format:id,name,balance,branch,type")
-    print(comma_table(accounts))
+    rows = []
+    for acc in accounts:
+        if acc.deleted == 0:
+            rows.append([acc.id, acc.name, acc.balance, acc.branch, acc.type])
+
+    header("Accounts")
+    print("Columns: ID | Name | Balance | Branch | Type")
+    paginated_view(rows, page_size=10)
+    pause()
+
 
 
 def main_menu(conn: main.connector.Connection) -> None:
+    clear_screen()
     title("Main Menu")
     options: list[str] = [
         "Log out",
@@ -96,6 +159,7 @@ def main_menu(conn: main.connector.Connection) -> None:
         "Delete Administrator Account"
     ]
     choice: int = selector(options)
+    clear_screen()
     match choice:
         case 0:
             exit()
@@ -165,12 +229,20 @@ except FileNotFoundError:
 
 
 def main_activity():
+    # Login ONCE
+    with main.connector.connect(DATABASE) as conn:
+        while True:
+            password = input("Enter your password: ")
+            if main.login_admin(conn, password=password):
+                print("Login successful.\n")
+                break
+            else:
+                print("Try again, wrong password.\n")
+
+    # After login, stay in the menu forever
     while True:
         with main.connector.connect(DATABASE) as conn:
-            if main.login_admin(conn, password=input("Enter your password:")):
-                main_menu(conn)
-            else:
-                print("Try again, wrong password")
+            main_menu(conn)
 
 
 if __name__ == "__main__":
