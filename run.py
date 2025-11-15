@@ -93,6 +93,7 @@ def main_menu(conn: main.connector.Connection) -> None:
         "View Transactions",
         "Add Donation To Treasury",
         "Create Administrator Account",
+        "Delete Administrator Account"
     ]
     choice: int = selector(options)
     match choice:
@@ -146,6 +147,9 @@ def main_menu(conn: main.connector.Connection) -> None:
             id = main.get_max_admin_id(conn) + 1
             administrator = main.Administrator(id, username, password)
             main.write_admin(conn, administrator)
+        case 7:
+            password = input("Enter password for account to remove:")
+            main.remove_admin(conn, password)
 
 
 try:
