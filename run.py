@@ -246,7 +246,7 @@ def main_menu(conn: main.connector.Connection) -> None:
                 main.write_account(conn, account)
         case 2:
             # Register Transaction
-            sender = int(("Enter sender account number:"))
+            sender = int(input("Enter sender account number:"))
             reciever = int(input("Enter receiver account number:"))
             value = abs(int(input("Enter amount to send:")))
             transaction = main.Transaction(sender, reciever, value)
