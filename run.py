@@ -38,7 +38,7 @@ def pause(message="Press Enter to continue..."):
     input(Color.OKBLUE + message + Color.ENDC)
 
 
-def paginated_view(rows: list[list[str]], page_size: int = 10) -> None:
+def paginated_view(rows: list[list[str]], page_size: int = 10, columns = '') -> None:
     """Display lists in paginated form."""
     if not rows:
         print("No data available.")
@@ -47,6 +47,8 @@ def paginated_view(rows: list[list[str]], page_size: int = 10) -> None:
     index = 0
     while index < len(rows):
         clear_screen()
+        if columns != '':
+            print(columns)
         print(Color.BOLD + f"Showing rows {index+1} to {min(index+page_size, len(rows))}" + Color.ENDC)
         print("-" * 50)
 
@@ -125,8 +127,8 @@ def view_transactions(conn):
     rows = [str(x).split(",") for x in transactions]
 
     header("Transactions")
-    print("Columns: Sender | Receiver | Value")
-    paginated_view(rows, page_size=10)
+    columns = "Columns: Sender | Receiver | Value"
+    paginated_view(rows, page_size=10, columns=columns)
     pause()
 
 
@@ -139,9 +141,67 @@ def view_accounts(conn):
             rows.append([acc.id, acc.name, acc.balance, acc.branch, acc.type])
 
     header("Accounts")
-    print("Columns: ID | Name | Balance | Branch | Type")
-    paginated_view(rows, page_size=10)
+    columns = "Columns: ID | Name | Balance | Branch | Type"
+    paginated_view(rows, page_size=10, columns=columns)
     pause()
+
+def view_statement(conn):
+    clear_screen()
+    header("Account Statement Generator")
+
+    try:
+        account_id = int(input("Enter account number: "))
+    except ValueError:
+        print(Color.FAIL + "Invalid account number." + Color.ENDC)
+        pause()
+        return
+
+    # Try to load the account
+    try:
+        account = main.load_account(conn, account_id)
+    except:
+        print(Color.FAIL + "Account does not exist." + Color.ENDC)
+        pause()
+        return
+
+    # Fetch all transactions
+    transactions = main.load_transactions(conn)
+
+    incoming = []
+    outgoing = []
+
+    # Categorize transactions
+    for t in transactions:
+        if t.recipient == account_id:
+            incoming.append([t.sender, t.recipient, t.value])
+        elif t.sender == account_id:
+            outgoing.append([t.sender, t.recipient, t.value])
+
+    clear_screen()
+    header(f"Statement for Account {account_id}")
+
+    # Show account info
+    print(Color.BOLD + f"Name: {account.name}" + Color.ENDC)
+    print(f"Branch: {account.branch}")
+    print(f"Type: {account.type}")
+    print(Color.OKGREEN + f"Current Balance: {account.balance}" + Color.ENDC)
+    print("\n")
+
+    # Display incoming
+    print(Color.OKCYAN + "Incoming Transactions" + Color.ENDC)
+    if incoming:
+        paginated_view(incoming)
+    else:
+        print("No incoming transactions.\n")
+
+    # Display outgoing
+    print(Color.OKCYAN + "Outgoing Transactions" + Color.ENDC)
+    if outgoing:
+        paginated_view(outgoing)
+    else:
+        print("No outgoing transactions.\n")
+
+    pause("End of statement. Press Enter to return...")
 
 
 
@@ -156,7 +216,9 @@ def main_menu(conn: main.connector.Connection) -> None:
         "View Transactions",
         "Add Donation To Treasury",
         "Create Administrator Account",
-        "Delete Administrator Account"
+        "Delete Administrator Account",
+        "Add Money Deposit",
+        "View Account Statement"
     ]
     choice: int = selector(options)
     clear_screen()
@@ -218,6 +280,26 @@ def main_menu(conn: main.connector.Connection) -> None:
         case 7:
             password = input("Enter password for account to remove:")
             main.remove_admin(conn, password)
+        case 8:
+            # Add Money Deposit
+            account_id = int(input("Enter account number: "))
+            amount = float(input("Enter amount to deposit: "))
+        
+            if amount <= 0:
+                print("Invalid amount.")
+            else:
+                print(f"Deposit {amount} into Account {account_id}?")
+                if input("Confirm (y/N): ") in "Yy":
+                    try:
+                        main.update_account(conn, account_id, amount)
+                        print("Deposit successful.")
+                    except:
+                        print("Deposit failed. Account may not exist.")
+        case 9:
+            # View Account Statement
+            view_statement(conn)
+
+        
 
 
 try:
