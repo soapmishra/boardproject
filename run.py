@@ -87,7 +87,7 @@ def main_menu(conn: main.connector.Connection) -> None:
     title("Main Menu")
     options: list[str] = [
         "Log out",
-        "Register New User Account",
+        "Register New Bank Account",
         "Register Transaction",
         "View Accounts",
         "View Transactions",
