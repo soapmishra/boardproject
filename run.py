@@ -145,7 +145,7 @@ def main_menu(conn: main.connector.Connection) -> None:
             password = input("Set Password")
             id = main.get_max_admin_id(conn) + 1
             administrator = main.Administrator(id, username, password)
-            main.write_admin(administrator)
+            main.write_admin(conn, administrator)
 
 
 try:
