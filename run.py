@@ -161,7 +161,7 @@ def view_statement(conn):
         pause()
         return
 
-    # Try to load the account
+  
     try:
         account = main.load_account(conn, account_id)
     except:
@@ -169,13 +169,13 @@ def view_statement(conn):
         pause()
         return
 
-    # Fetch all transactions
+  
     transactions = main.load_transactions(conn)
 
     incoming = []
     outgoing = []
 
-    # Categorize transactions
+  
     for t in transactions:
         if t.recipient == account_id:
             incoming.append([t.sender, t.recipient, t.value])
@@ -185,21 +185,21 @@ def view_statement(conn):
     clear_screen()
     header(f"Statement for Account {account_id}")
 
-    # Show account info
+  
     print(Color.BOLD + f"Name: {account.name}" + Color.ENDC)
     print(f"Branch: {account.branch}")
     print(f"Type: {account.type}")
     print(Color.OKGREEN + f"Current Balance: {account.balance}" + Color.ENDC)
     print("\n")
 
-    # Display incoming
+  
     print(Color.OKCYAN + "Incoming Transactions" + Color.ENDC)
     if incoming:
         paginated_view(incoming)
     else:
         print("No incoming transactions.\n")
 
-    # Display outgoing
+  
     print(Color.OKCYAN + "Outgoing Transactions" + Color.ENDC)
     if outgoing:
         paginated_view(outgoing)
@@ -313,7 +313,7 @@ except FileNotFoundError:
 
 
 def main_activity():
-    # Login ONCE
+  
     with main.connector.connect(DATABASE) as conn:
         while True:
             password = input("Enter your password: ")
@@ -323,7 +323,7 @@ def main_activity():
             else:
                 print("Try again, wrong password.\n")
 
-    # After login, stay in the menu forever
+  
     while True:
         with main.connector.connect(DATABASE) as conn:
             main_menu(conn)
