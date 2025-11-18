@@ -40,7 +40,9 @@ class Transaction:
         return f"Transaction(Sender Account Number:{self.sender}, Recipient Account Number: {self.recipient}, Amount: {self.value})"
 
     def __iter__(self):
-        return iter((self.sender, self.recipient, self.value))
+        return iter(
+            (self.sender, self.recipient, self.value)
+            )
 
     def __getitem__(self, item) -> int | float:
         return tuple(self)[item]
