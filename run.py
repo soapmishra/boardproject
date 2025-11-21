@@ -104,6 +104,18 @@ BRANCHES = [
     "West Bengal",
 ]
 AC_TYPES = ["Checking Acount", "Savings Account", "Salary Account"]
+OPTIONS = [
+    "Log out",
+    "Register New Bank Account",
+    "Register Transaction",
+    "View Accounts",
+    "View Transactions",
+    "Add Donation To Treasury",
+    "Create Administrator Account",
+    "Delete Administrator Account",
+    "Add Money Deposit",
+    "View Account Statement",
+]
 
 
 def selector(options: list[str]) -> int:
@@ -161,7 +173,6 @@ def view_statement(conn):
         pause()
         return
 
-  
     try:
         account = main.load_account(conn, account_id)
     except:
@@ -169,13 +180,11 @@ def view_statement(conn):
         pause()
         return
 
-  
     transactions = main.load_transactions(conn)
 
     incoming = []
     outgoing = []
 
-  
     for t in transactions:
         if t.recipient == account_id:
             incoming.append([t.sender, t.recipient, t.value])
@@ -185,21 +194,18 @@ def view_statement(conn):
     clear_screen()
     header(f"Statement for Account {account_id}")
 
-  
     print(Color.BOLD + f"Name: {account.name}" + Color.ENDC)
     print(f"Branch: {account.branch}")
     print(f"Type: {account.type}")
     print(Color.OKGREEN + f"Current Balance: {account.balance}" + Color.ENDC)
     print("\n")
 
-  
     print(Color.OKCYAN + "Incoming Transactions" + Color.ENDC)
     if incoming:
         paginated_view(incoming)
     else:
         print("No incoming transactions.\n")
 
-  
     print(Color.OKCYAN + "Outgoing Transactions" + Color.ENDC)
     if outgoing:
         paginated_view(outgoing)
@@ -212,19 +218,7 @@ def view_statement(conn):
 def main_menu(conn: main.connector.Connection) -> None:
     clear_screen()
     title("Main Menu")
-    options: list[str] = [
-        "Log out",
-        "Register New Bank Account",
-        "Register Transaction",
-        "View Accounts",
-        "View Transactions",
-        "Add Donation To Treasury",
-        "Create Administrator Account",
-        "Delete Administrator Account",
-        "Add Money Deposit",
-        "View Account Statement",
-    ]
-    choice: int = selector(options)
+    choice: int = selector(OPTIONS)
     clear_screen()
     match choice:
         case 0:
@@ -313,7 +307,7 @@ except FileNotFoundError:
 
 
 def main_activity():
-  
+
     with main.connector.connect(DATABASE) as conn:
         while True:
             password = input("Enter your password: ")
@@ -323,7 +317,6 @@ def main_activity():
             else:
                 print("Try again, wrong password.\n")
 
-  
     while True:
         with main.connector.connect(DATABASE) as conn:
             main_menu(conn)
